@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "reed-solomon": "^4.0.0"
+  }
+}

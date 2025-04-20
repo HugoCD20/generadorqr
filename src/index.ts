@@ -1,0 +1,57 @@
+import { CanvasLocal } from './canvasLocal.js';
+import { generarQR } from './generarQR.js';
+
+let canvas: HTMLCanvasElement;
+let graphics: CanvasRenderingContext2D;
+let miCanvas: CanvasLocal;
+let qr: generarQR;
+
+document.addEventListener('DOMContentLoaded', () => {
+  canvas = <HTMLCanvasElement>document.getElementById('circlechart');
+  graphics = canvas.getContext('2d');
+  qr= new generarQR();
+  crearUIGeneradorQR();
+});
+
+function crearUIGeneradorQR() {
+  const cardBody = document.querySelector('.card-body');
+
+  const form = document.createElement('form');
+  form.className = 'mb-3';
+  form.id = 'qr-form';
+
+  const inputGroup = document.createElement('div');
+  inputGroup.className = 'input-group mb-3';
+  
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'form-control';
+  input.id = 'qr-text';
+  input.placeholder = 'URL';
+  input.setAttribute('aria-label', 'Texto para QR');
+  
+  const button = document.createElement('button');
+  button.className = 'btn btn-primary';
+  button.type = 'submit';
+  button.textContent = 'Generar QR';
+  
+  inputGroup.appendChild(input);
+  inputGroup.appendChild(button);
+  form.appendChild(inputGroup);
+  cardBody.appendChild(form);
+  
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const texto = input.value.trim();
+    
+    if (texto) {
+      let datos:boolean[][] = qr.generarQR(texto);
+      miCanvas = new CanvasLocal(graphics, canvas, datos[0].length);
+      miCanvas.generarQR(datos)
+  
+
+    } else {
+      alert('Por favor ingrese un texto o URL para generar el código QR');
+    }
+  });
+}
