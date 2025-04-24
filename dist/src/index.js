@@ -1,13 +1,10 @@
 import { CanvasLocal } from './canvasLocal.js';
-import { generarQR } from './generarQR.js';
 let canvas;
 let graphics;
 let miCanvas;
-let qr;
 document.addEventListener('DOMContentLoaded', () => {
     canvas = document.getElementById('circlechart');
     graphics = canvas.getContext('2d');
-    qr = new generarQR();
     crearUIGeneradorQR();
 });
 function crearUIGeneradorQR() {
@@ -35,9 +32,13 @@ function crearUIGeneradorQR() {
         e.preventDefault();
         const texto = input.value.trim();
         if (texto) {
-            let datos = qr.generarQR(texto);
-            miCanvas = new CanvasLocal(graphics, canvas, datos[0].length);
-            miCanvas.generarQR(datos);
+            if (texto.length <= 34) {
+                miCanvas = new CanvasLocal(graphics, canvas);
+                miCanvas.paint(texto);
+            }
+            else {
+                alert('Cadena demasiado larga');
+            }
         }
         else {
             alert('Por favor ingrese un texto o URL para generar el código QR');
